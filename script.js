@@ -1,3 +1,29 @@
+// --- VIDEO LOADER INITIALIZATION LOGIC ---
+window.addEventListener('DOMContentLoaded', () => {
+    const loaderScreen = document.getElementById('loadingScreen');
+    const loaderText = document.getElementById('loaderPercent');
+    let progress = 0;
+
+    // Increments percentage value sequentially to emulate data loading
+    const progressInterval = setInterval(() => {
+        progress += Math.floor(Math.random() * 4) + 1; // Randomized steady progress jumps
+        
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(progressInterval);
+            
+            // Allow user to view full 100% for a split second, then dismiss loader screen smoothly
+            setTimeout(() => {
+                loaderScreen.classList.add('fade-out');
+            }, 500);
+        }
+        
+        loaderText.textContent = `${progress}%`;
+    }, 40); // Ticker speed config
+});
+
+
+// --- REST OF ORIGINAL FLOWER DICTIONARY & EXTRACTION ENGINE ---
 const flowerDictionary = {
     'A': { name: 'Aster', meaning: 'Symbol of Love & Daintiness', image: 'https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?auto=format&fit=crop&w=150&q=80' },
     'B': { name: 'Begonia', meaning: 'Deep Thoughts & Gratitude', image: 'https://images.unsplash.com/photo-1622484211148-7170984cfb03?auto=format&fit=crop&w=150&q=80' },
@@ -7,7 +33,7 @@ const flowerDictionary = {
     'F': { name: 'Freesia', meaning: 'Innocence, Trust & Thoughtfulness', image: 'https://images.unsplash.com/photo-1550950158-d0d960dff51b?auto=format&fit=crop&w=150&q=80' },
     'G': { name: 'Gardenia', meaning: 'Secret Love, Purity & Joy', image: 'https://images.unsplash.com/photo-1614713570650-0196236b2255?auto=format&fit=crop&w=150&q=80' },
     'H': { name: 'Hyacinth', meaning: 'Playfulness & Constancy', image: 'https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=150&q=80' },
-    'I': { name: 'Iris', meaning: 'Faith, Hope, Courage & Wisdom', image: 'https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?auto=format&fit=crop&w=150&q=80' },
+    'I': { name: 'Iris', meaning: 'Faith, Hope, Courage & Wisdom', image: 'https://images.unsplash.com/photo-15607177871-3375b49704da?auto=format&fit=crop&w=150&q=80' },
     'J': { name: 'Jasmine', meaning: 'Unconditional Love & Good Luck', image: 'https://images.unsplash.com/photo-1508784411316-02b8cd4d3a3a?auto=format&fit=crop&w=150&q=80' },
     'K': { name: 'Kalmia', meaning: 'Ambition & Perseverance', image: 'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=150&q=80' },
     'L': { name: 'Lily', meaning: 'Purity, Passion & Rebirth', image: 'https://images.unsplash.com/photo-1502977249166-824b3a8a4d6d?auto=format&fit=crop&w=150&q=80' },
@@ -38,29 +64,22 @@ function generateBouquet() {
     const bouquetContainer = document.getElementById('bouquetContainer');
     const meaningsContainer = document.getElementById('meaningsContainer');
 
-    // Reset UI panels
     flowerCanvas.innerHTML = '';
     meaningsList.innerHTML = '';
 
     if (!inputName) return;
 
-    // 1. Keep only alphabetic characters
     const cleanLetters = inputName.replace(/[^A-Z]/g, '').split('');
-    
-    // 2. Remove duplicates automatically using a JavaScript Set, then turn it back into an array
     const uniqueLetters = [...new Set(cleanLetters)];
 
     if (uniqueLetters.length === 0) return;
 
-    // Reveal hidden layout cards
     bouquetContainer.classList.remove('hidden');
     meaningsContainer.classList.remove('hidden');
 
-    // 3. Process each unique letter only once
     uniqueLetters.forEach((letter, index) => {
         const flower = flowerDictionary[letter];
         if (flower) {
-            // Generate visual flower item in bouquet
             const flowerItem = document.createElement('div');
             flowerItem.classList.add('flower-item');
             flowerItem.style.animationDelay = `${index * 0.08}s`;
@@ -70,7 +89,6 @@ function generateBouquet() {
             `;
             flowerCanvas.appendChild(flowerItem);
 
-            // Generate detailed breakdown item
             const listItem = document.createElement('li');
             listItem.style.animation = `fadeInUp 0.4s ease-out forwards`;
             listItem.style.animationDelay = `${index * 0.05}s`;
