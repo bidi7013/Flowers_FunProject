@@ -3,50 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flowers FunProject - Bouquet Generator</title>
-    <!-- Google Fonts for elegant typography -->
+    <title>Bloom & Spell — Custom Floral Bouquet Studio</title>
+    <!-- Google Fonts for typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="app-wrapper">
+<body class="theme-romance">
+    <!-- Ambient Background Petal Canvas -->
+    <canvas id="ambientCanvas"></canvas>
+
+    <div class="app-container">
+        <!-- Main Top Bar Header -->
         <header class="app-header">
-            <div class="logo-badge">🌸 Sweet Blossom 🌸</div>
-            <h1>Bouquet Generator</h1>
-            <p>Transform your name into a breathtaking, personalized digital bouquet and unravel its hidden language.</p>
+            <div class="logo-wrapper">
+                <div class="logo-icon">🌸</div>
+                <div class="logo-text">
+                    <span class="brand-tag">Bespoke Floral Language Studio</span>
+                    <h1>Bloom & Spell</h1>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="soundToggleBtn" class="icon-btn" title="Toggle Sound Chimes">
+                    <span id="soundIcon">🔔</span>
+                </button>
+                <button id="themeToggleBtn" class="icon-btn" title="Toggle Theme (Romance / Midnight)">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
         </header>
 
-        <main class="main-content">
-            <div class="input-card">
-                <div class="input-group">
-                    <input type="text" id="nameInput" placeholder="Type a name (e.g., AMANDA)" maxlength="20" autocomplete="off">
-                    <button id="generateBtn">
-                        <span>Weave Bouquet</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m12 16 4-4-4-4"/><path d="M8 12h8"/></svg>
-                    </button>
+        <!-- Studio Main Workspace -->
+        <main class="studio-grid">
+            <!-- Left Panel: Controls & Customization -->
+            <section class="control-panel glass-card">
+                <div class="panel-header">
+                    <h2>Studio Crafting Bench</h2>
+                    <p>Enter a name or word to translate characters into a personalized bouquet with botanical meanings.</p>
                 </div>
-            </div>
 
-            <!-- Central Bouquet Visualizer -->
-            <div id="bouquetContainer" class="bouquet-card hidden">
-                <div class="card-header">
-                    <h2>Your Handcrafted Bouquet</h2>
-                    <div class="ribbon-divider"><span>💝</span></div>
+                <div class="input-section">
+                    <label for="nameInput" class="input-label">Recipient's Name / Word</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="nameInput" placeholder="Enter a name (e.g. VIOLET)" maxlength="16" autocomplete="off" value="AMANDA">
+                        <button id="clearBtn" class="clear-btn" title="Clear input">&times;</button>
+                    </div>
                 </div>
-                <div id="flowerCanvas" class="flower-grid"></div>
-            </div>
 
-            <!-- Flower Breakdown & Meanings -->
-            <div id="meaningsContainer" class="meanings-card hidden">
-                <h3>The Language of Your Bouquet</h3>
-                <div class="table-wrapper">
-                    <ul id="meaningsList" class="styled-list"></ul>
+                <!-- Wrapping Paper Configurator -->
+                <div class="config-section">
+                    <h3>1. Wrapping Paper</h3>
+                    <div class="option-chips" id="paperOptions">
+                        <button class="chip active" data-paper="blush" style="--chip-bg: #fecdd3; --chip-color: #9f1239;">Blush Pink</button>
+                        <button class="chip" data-paper="kraft" style="--chip-bg: #d7ccc8; --chip-color: #4e342e;">Kraft Vintage</button>
+                        <button class="chip" data-paper="midnight" style="--chip-bg: #1e293b; --chip-color: #f8fafc;">Midnight Silk</button>
+                        <button class="chip" data-paper="sage" style="--chip-bg: #dcfce7; --chip-color: #166534;">Sage Linen</button>
+                        <button class="chip" data-paper="gold" style="--chip-bg: #fef08a; --chip-color: #854d0e;">Royal Gold</button>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Ribbon Style Configurator -->
+                <div class="config-section">
+                    <h3>2. Satin Ribbon</h3>
+                    <div class="option-chips" id="ribbonOptions">
+                        <button class="chip active" data-ribbon="crimson" style="--chip-bg: #e11d48; --chip-color: #ffffff;">Crimson</button>
+                        <button class="chip" data-ribbon="gold" style="--chip-bg: #eab308; --chip-color: #422006;">Gold Silk</button>
+                        <button class="chip" data-ribbon="emerald" style="--chip-bg: #059669; --chip-color: #ffffff;">Emerald</button>
+                        <button class="chip" data-ribbon="lavender" style="--chip-bg: #c084fc; --chip-color: #3b0764;">Lavender</button>
+                        <button class="chip" data-ribbon="pearl" style="--chip-bg: #f8fafc; --chip-color: #334155;">Pearl</button>
+                    </div>
+                </div>
+
+                <!-- Greenery & Accents Configurator -->
+                <div class="config-section">
+                    <h3>3. Greenery & Accents</h3>
+                    <div class="toggle-grid">
+                        <label class="toggle-item">
+                            <input type="checkbox" id="accentEucalyptus" checked>
+                            <span class="toggle-custom"></span>
+                            <span>Eucalyptus</span>
+                        </label>
+                        <label class="toggle-item">
+                            <input type="checkbox" id="accentBabysBreath" checked>
+                            <span class="toggle-custom"></span>
+                            <span>Baby's Breath</span>
+                        </label>
+                        <label class="toggle-item">
+                            <input type="checkbox" id="accentFern" checked>
+                            <span class="toggle-custom"></span>
+                            <span>Forest Ferns</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button id="generateBtn" class="primary-btn pulse-glow">
+                    <span class="btn-sparkle">✨</span>
+                    <span>Weave Digital Bouquet</span>
+                </button>
+            </section>
+
+            <!-- Center Panel: Live Bouquet Showcase Studio -->
+            <section class="visualizer-panel glass-card">
+                <div class="visualizer-header">
+                    <div>
+                        <h2 id="bouquetTitle">Amanda's Handcrafted Bouquet</h2>
+                        <span class="subtitle-tag" id="bouquetSubtitle">Arranged with love & intention</span>
+                    </div>
+                    <div class="toolbar-btns">
+                        <button id="shuffleBtn" class="tool-btn" title="Shuffle Flower Angles">
+                            <span>🔀</span> Shuffle
+                        </button>
+                        <button id="exportBtn" class="tool-btn highlight" title="Download High-Res PNG">
+                            <span>📸</span> Export Image
+                        </button>
+                        <button id="cardBtn" class="tool-btn" title="Generate Greeting Card">
+                            <span>📜</span> Card & Poem
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Center Bouquet Canvas / Wrapper Container -->
+                <div class="bouquet-stage" id="bouquetStage">
+                    <!-- Interactive SVG Stems, Wrapping Paper, Ribbon & Bloom Layers -->
+                    <div class="wrapper-bg" id="wrapperBg"></div>
+                    
+                    <!-- SVG Stems Layer -->
+                    <svg class="stems-svg" id="stemsSvg" viewBox="0 0 500 600"></svg>
+                    
+                    <!-- Dynamic Greenery Layer -->
+                    <div class="greenery-layer" id="greeneryLayer"></div>
+                    
+                    <!-- Dynamic Flowers Bloom Layer -->
+                    <div class="flowers-layer" id="flowersLayer"></div>
+
+                    <!-- Paper Wrap Overlap & Bow -->
+                    <div class="wrapper-fg" id="wrapperFg">
+                        <div class="ribbon-bow" id="ribbonBow"></div>
+                    </div>
+                </div>
+            </section>
         </main>
+
+        <!-- Bottom Panel: Detailed Language of Flowers -->
+        <section class="meanings-panel glass-card">
+            <div class="meanings-header">
+                <h2>The Botanical Meaning & Language of Your Flowers</h2>
+                <p>Every blossom tells a story derived from Victorian floriography.</p>
+            </div>
+
+            <div class="meanings-grid" id="meaningsGrid">
+                <!-- Dynamically generated flower cards -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Crafted with 💖 for Flowers FunProject | Click on any blossom to hear chimes & view lore.</p>
+        </footer>
     </div>
-    <script src="script.js"></script>
+
+    <!-- Modal: Gift Card & Poem Generator -->
+    <div id="cardModal" class="modal-backdrop hidden">
+        <div class="modal-card glass-card">
+            <button id="closeModalBtn" class="close-modal">&times;</button>
+            <div class="card-printable" id="printableCard">
+                <div class="card-inner">
+                    <div class="card-floral-header">🌸 Bespoke Floral Sentiment 🌸</div>
+                    <h2 id="cardRecipientName">For Amanda</h2>
+                    <div class="divider-line"><span>🪷</span></div>
+                    <p class="card-poem" id="cardPoem">
+                        In petals soft and blossoms bright,<br>
+                        Your name weaves colors in the light.<br>
+                        With Aster's love and Marigold's grace,<br>
+                        A floral charm no time can erase.
+                    </p>
+                    <div class="card-flower-summary" id="cardFlowerSummary"></div>
+                    <div class="card-footer-stamp">Handcrafted via Bloom & Spell Studio</div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="copyPoemBtn" class="secondary-btn"><span>📋</span> Copy Poem</button>
+                <button id="printCardBtn" class="primary-btn"><span>🖨️</span> Print / Save PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flower Detail Drawer / Modal -->
+    <div id="flowerDetailModal" class="modal-backdrop hidden">
+        <div class="modal-card small glass-card">
+            <button id="closeDetailBtn" class="close-modal">&times;</button>
+            <div class="detail-body" id="detailBody"></div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
 </body>
 </html>
